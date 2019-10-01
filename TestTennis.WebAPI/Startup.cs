@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using GraphQL;
+using GraphQL.Http;
+using GraphQL.Server;
+using GraphQL.Server.Ui.Playground;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TestTennis.Application.Repositories;
 using TestTennis.Infrastructure.JsonDataAccess.Repositories;
+using TestTennis.WebAPI.GraphQL.Shemas;
 
 namespace TestTennis.WebAPI
 {
@@ -30,8 +35,15 @@ namespace TestTennis.WebAPI
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             var tennisRepository = new TennisRepository(Path.GetDirectoryName(GetType().Assembly.Location) + "/Files/HeadToHead.json");
+
             services.AddSingleton<IReadOnlyTennisRepository>(tennisRepository);
             services.AddSingleton<IWriteOnlyTennisRepository>(tennisRepository);
+
+            services.AddScoped<IDependencyResolver>(s => new FuncDependencyResolver(s.GetRequiredService));
+            services.AddScoped<AppSchema>();
+
+            services.AddGraphQL(o => { o.ExposeExceptions = false; })
+                .AddGraphTypes(ServiceLifetime.Scoped);
 
             services.AddSwaggerGen(c =>
             {
@@ -63,6 +75,10 @@ namespace TestTennis.WebAPI
             }
 
             app.UseHttpsRedirection();
+
+            app.UseGraphQL<AppSchema>();
+            app.UseGraphQLPlayground(new GraphQLPlaygroundOptions());
+
             app.UseMvc();
         }
     }

@@ -12,6 +12,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+    <PackageReference Include="GraphQL" Version="2.4.0" />
+    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="3.4.0" />
+    <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="3.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +24,10 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Files\" />
+    <Folder Include="GraphQL\" />
+    <Folder Include="GraphQL\Schemas\" />
+    <Folder Include="GraphQL\Queries\" />
+    <Folder Include="GraphQL\Types\" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="Files\HeadToHead.json">
