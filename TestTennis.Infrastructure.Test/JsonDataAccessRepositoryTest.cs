@@ -47,16 +47,16 @@ namespace TestTennis.Infrastructure.Test
         [Test]
         public async Task DeletePlayer()
         {
-            var result = await writeOnlyTennisRepository.Delete(52);
-            Assert.That(result == true);
+            var player = await writeOnlyTennisRepository.Delete(52);
+            Assert.That(player.Id == 52);
             Assert.That((await readOnlyTennisRepository.FindAll()).FirstOrDefault(p => p.Id == 52) == null);
         }
 
         [Test]
         public async Task DeletePlayerNotFound()
         {
-            var result = await writeOnlyTennisRepository.Delete(1);
-            Assert.That(result == false);
+            var player = await writeOnlyTennisRepository.Delete(1);
+            Assert.That(player == null);
         }
     }
 }

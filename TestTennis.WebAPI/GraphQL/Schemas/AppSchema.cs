@@ -11,6 +11,7 @@ namespace TestTennis.WebAPI.GraphQL.Shemas
             :base(resolver)
         {
             Query = resolver.Resolve<AppQuery>();
+            Mutation = resolver.Resolve<AppMutation>();
         }
     }
 }

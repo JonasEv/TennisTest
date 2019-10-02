@@ -46,7 +46,7 @@ namespace TestTennis.WebAPI.Controllers
             if (player == null)
                 return NotFound();
 
-            return await _readOnlyTennisRepository.FindById(id);
+            return player;
         }
 
         /// <summary>
@@ -56,12 +56,13 @@ namespace TestTennis.WebAPI.Controllers
         /// <response code="20O">OK</response>
         /// <response code="404">If player doesn't exist</response>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult<Player>> Delete(int id)
         {
-            if (await _writeOnlyTennisRepository.Delete(id))
-                return Ok();
-            else
+            var player = await _writeOnlyTennisRepository.Delete(id);
+            if (player == null)
                 return NotFound();
+
+            return player;
         }
     }
 }

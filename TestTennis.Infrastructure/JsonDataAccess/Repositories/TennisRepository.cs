@@ -28,11 +28,12 @@ namespace TestTennis.Infrastructure.JsonDataAccess.Repositories
             return (await LoadPlayers()).FirstOrDefault(p => p.Id == id);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<Player> Delete(int id)
         {
             var players = (await LoadPlayers()).ToList();
-            if (!players.Remove(players.Where(p => p.Id == id).FirstOrDefault()))
-                return false;
+            var player = players.FirstOrDefault(p => p.Id == id);
+            if (player == null || !players.Remove(player))
+                return null;
 
             if (!isModfified)
             {
@@ -43,7 +44,7 @@ namespace TestTennis.Infrastructure.JsonDataAccess.Repositories
             {
                 await outputFile.WriteAsync(JsonConvert.SerializeObject(new Players { PlayerList = players }));
             }
-            return true;
+            return player;
         }
 
         private async Task<IEnumerable<Player>> LoadPlayers()

@@ -10,14 +10,17 @@ namespace TestTennis.WebAPI.GraphQL.Queries
     {
         public AppQuery(IReadOnlyTennisRepository repository)
         {
-            Field<ListGraphType<PlayerType>>("players",
-                resolve: context => repository.FindAll());
-            Field<PlayerType>("player",
+            FieldAsync<ListGraphType<PlayerType>>("players",
+                resolve: async context =>
+                {
+                    return await repository.FindAll();
+                });
+            FieldAsync<PlayerType>("player",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "playerId" }),
-                resolve: context =>
+                resolve: async context =>
                 {
                     var id = context.GetArgument<int>("playerId");
-                    var player = repository.FindById(id);
+                    var player = await repository.FindById(id);
                     if (player == null)
                         context.Errors.Add(new ExecutionError("Not found"));
                     return player;

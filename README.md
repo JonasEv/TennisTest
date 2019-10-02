@@ -16,5 +16,6 @@ Pour des raisons pratiques, le ficher est dupliqué lorsqu'un joueur est supprim
 
 ## Documentation
 Swagger : /swagger/index.html
+GraphQL : /ui/playground
 
 L'application se lance sur le port 5001 du localhost (localhost:5001)

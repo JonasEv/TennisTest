@@ -57,19 +57,20 @@ namespace TestTennis.WebAPI.Test
         [Test]
         public async Task DeletPlayer()
         {
-            writeOnlyTennisRepositoryMock.Setup(repo => repo.Delete(1)).ReturnsAsync(true);
+            writeOnlyTennisRepositoryMock.Setup(repo => repo.Delete(1)).ReturnsAsync(GetTestPlayers()[0]);
             var result = await tennisController.Delete(1);
 
-            Assert.That(result is OkResult);
+            Assert.That(result.Result is OkResult);
         }
 
         [Test]
         public async Task DeletPlayerNotFound()
         {
-            writeOnlyTennisRepositoryMock.Setup(repo => repo.Delete(1)).ReturnsAsync(false);
+            Player player = null;
+            writeOnlyTennisRepositoryMock.Setup(repo => repo.Delete(1)).ReturnsAsync(player);
             var result = await tennisController.Delete(1);
 
-            Assert.That(result is NotFoundResult);
+            Assert.That(result.Result is NotFoundResult);
         }
 
         private List<Player> GetTestPlayers()
